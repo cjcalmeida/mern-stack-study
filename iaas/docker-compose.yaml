@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  mongo:
+    container_name: mongo_db
+    image: mongo
+    restart: on-failure
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=twitter
+      - MONGO_INITDB_ROOT_PASSWORD=twitter
+      - MONGO_INITDB_DATABASE=twitter
+    ports:
+      - "27017:27017"
+    volumes:
+      #      - "twitter_mongo_vol:/data/db"
+      - "./mongo_init.js:/docker-entrypoint-initdb.d/init-mongo.js:ro"
+  postgres:
+    container_name: postgres_db
+    image: "postgres:alpine"
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=twitter
+      - POSTGRES_PASSWORD=twitter
+      - POSTGRES_DB=twitter
+    ports:
+      - "5432:5432"
+    volumes:
+      #      - "twitter_postgres_vol:/var/lib/postgresql/data"
+      - "./postgres_init.sql:/docker-entrypoint-initdb.d/twitter.sql"
+#volumes:
+#  twitter_mongo_vol: {}
+#  twitter_postgres_vol: {}
